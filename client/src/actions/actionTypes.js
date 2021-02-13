@@ -1,0 +1,7 @@
+export const GET_HOSPITALS = "GET_HOSPITALS"
+export const ADD_HOSPITAL = "ADD_HOSPITAL"
+export const DELETE_HOSPITAL = "DELETE_HOSPITAL"
+export const GET_DEVICES = "GET_DEVICES"
+export const ADD_DEVICE = "ADD_DEVICE"
+export const DELETE_DEVICE = "DELETE_DEVICE"
+export const GET_DISTANCE = "GET_DISTANCE"

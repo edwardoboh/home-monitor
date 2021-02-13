@@ -1,0 +1,111 @@
+import React, {Component} from 'react'
+import {
+    withScriptjs,
+    withGoogleMap,
+    GoogleMap,
+    Marker
+} from 'react-google-maps'
+import AutoComplete from 'react-google-autocomplete'
+
+import {connect} from 'react-redux'
+
+import {getHospitals} from '../../actions/hospitalActions'
+import {getDevices} from '../../actions/deviceActions'
+
+// import * as deviceData from './data/deviceData.json'
+// import * as hospitalData from './data/hospitalData.json'
+
+class Map extends Component {
+    constructor(){
+        super()
+        this.state = {
+            zoom: 14,
+            address: "",
+            state: "",
+            city: "",
+            street: "",
+            mapPosition: {lat: 6.331745043250994, lng: 5.623306914417808},
+            markerPosition: {
+                lat: "",
+                lng: ""
+            }
+            // hospitalPositions: hospitalData,
+            // devicePositions: deviceData
+    
+        }
+    }
+
+    componentDidMount(){
+        // get all hospitals and device location and set it to state
+        this.props.getHospitals()
+        // this.props.getDevices()
+
+        // Set the state to center the map
+    }
+
+    toSelectedLocation = (place) => {
+        this.setState({mapPosition: {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()}})
+    }
+
+    render(){
+        // get state values from redux store
+        const {hospitalPositions} = this.props.hospitals
+        const {devicePositions} = this.props.devices
+        // const deviceCenter = {lat: devicePositions[0].geometry.coordinates[0], lng: devicePositions[0].geometry.coordinates[1]}
+
+        const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
+        const CrashMap = withScriptjs(withGoogleMap(() => 
+            <GoogleMap
+                defaultZoom={this.state.zoom}
+                defaultCenter={this.state.mapPosition}
+                // defaultCenter={deviceCenter}
+            >
+                {hospitalPositions && hospitalPositions.map((mark) => 
+                <Marker
+                    key={mark.properties.id}
+                    position={{lat: mark.geometry.coordinates[0], lng: mark.geometry.coordinates[1]}}
+                    label="H"
+                >
+                </Marker>
+                )}
+                    
+                {devicePositions && devicePositions.map((mark) => 
+                        <Marker
+                            key={mark.properties.id}
+                            position={{lat: mark.geometry.coordinates[0], lng: mark.geometry.coordinates[1]}}
+                            // label="D"
+                            icon={{
+                                url: `/skateboarding.svg`,
+                                scaledSize: new window.google.maps.Size(25, 25)
+                            }}
+                        >
+                        </Marker>
+                    )
+                }
+            <AutoComplete 
+                style={{width: "100%", marginTop: "1rem"}}
+                type={['(regions)']}
+                onPlaceSelected={this.toSelectedLocation}
+                componentRestrictions={{country: "ng"}}
+            />
+            </GoogleMap>
+        ))
+        return(
+            <div className="" style={{marginLeft: "1.5rem", marginTop: "1rem"}}>
+                <CrashMap 
+                    googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${api_key}&v=3.exp&libraries=geometry,drawing,places`}
+                    loadingElement={<div style={{height: "100%"}} />}
+                    containerElement={<div style={{height: "65vh", width: "95vw"}} />}
+                    mapElement={<div style={{height: "100%"}} />}
+                />
+            </div>
+        )
+    }
+}
+
+const mapStateToProps = (state) => ({
+    hospitals: state.hospitals,
+    devices: state.devices
+})
+
+export default connect(mapStateToProps, {getHospitals, getDevices})(Map);
