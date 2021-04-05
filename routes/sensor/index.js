@@ -4,6 +4,7 @@ const Device = require("../../model/Devices")
 
 let DeviceSocket = ""
 
+// module.exports = (io) => {
 module.exports = (io) => {
 
     io.on("connection", (Socket) => {
@@ -42,7 +43,8 @@ module.exports = (io) => {
 
     // POST     :[url]/sensor/update
     route.post("/update", (req, res) => {
-        const {latitude, longitude, accX, accY, accZ} = request.body
+        let id;
+        const {latitude, longitude, accX, accY, accZ} = req.body
         const accData = {
             accX,
             accY,
@@ -50,14 +52,21 @@ module.exports = (io) => {
         }
         const accelerometer = JSON.stringify(accData)
         
+        // Emitting Event to the Client
         if(DeviceSocket === ""){}
-        else DeviceSocket.emit("update", {latitude, longitude, accelerometer})
+        else{
+            // Remember to add address to the emitted message
+            DeviceSocket.emit("update", {latitude, longitude, accelerometer}, (message) => {
+                // console.log(message)
+            })
+            // console.log("Server: Emmited data from server")
+        }
         
         Device.find((err, resp) => {
             if(err){
                 return res.json({data: "", msg: "Error in server: Couldn't get 1st Device"})
             }
-            const id = resp[0]._id
+            id = resp[0]._id
         })
         
         // Perform Geolocation with GMap API to get address from LngLat values
@@ -68,6 +77,7 @@ module.exports = (io) => {
             }
             // OPTIONAL: Send a response to the user if you'd like
         })
+        res.end("Update Successful")
     })
 
     return route

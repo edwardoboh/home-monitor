@@ -8,6 +8,15 @@ const socketio = require("socket.io")
 const server = http.createServer(app)
 const io = socketio(server)
 
+// ******************
+// let DeviceSocket;
+// io.on("connection", (Socket) => {
+//     console.log("Server: Client is connected to the server")
+//     DeviceSocket = Socket
+//     Socket.on("disconnect", () => console.log("Client has disconnected from server"))
+
+// })
+// ******************
 
 
 // Connection to database
@@ -22,6 +31,7 @@ app.use(express.json())
 app.use("/hospital", require("./routes/ui/hospitalRoutes"))
 app.use("/device", require("./routes/ui/deviceRoutes"))
 app.use("/sensor", require("./routes/sensor")(io))
+// app.use("/sensor", require("./routes/sensor")(DeviceSocket))
 
 const PORT = process.env.PORT || 5000
 server.listen(PORT, () => console.log(`server started on port ${PORT}`))

@@ -15,8 +15,11 @@ import {getDevices} from '../../actions/deviceActions'
 // import * as deviceData from './data/deviceData.json'
 // import * as hospitalData from './data/hospitalData.json'
 
+const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
+let CrashMap;
+
 class Map extends Component {
-    constructor(){
+    constructor(props){
         super()
         this.state = {
             zoom: 14,
@@ -31,7 +34,6 @@ class Map extends Component {
             }
             // hospitalPositions: hospitalData,
             // devicePositions: deviceData
-    
         }
     }
 
@@ -48,13 +50,17 @@ class Map extends Component {
     }
 
     render(){
+        // Device Location from Socket
+        let {latitude, longitude} = this.props.devLoc
+
         // get state values from redux store
         const {hospitalPositions} = this.props.hospitals
         const {devicePositions} = this.props.devices
         // const deviceCenter = {lat: devicePositions[0].geometry.coordinates[0], lng: devicePositions[0].geometry.coordinates[1]}
 
-        const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
-        const CrashMap = withScriptjs(withGoogleMap(() => 
+        // const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
+        CrashMap = withScriptjs(withGoogleMap(() => {
+            return(
             <GoogleMap
                 defaultZoom={this.state.zoom}
                 defaultCenter={this.state.mapPosition}
@@ -72,7 +78,8 @@ class Map extends Component {
                 {devicePositions && devicePositions.map((mark) => 
                         <Marker
                             key={mark.properties.id}
-                            position={{lat: mark.geometry.coordinates[0], lng: mark.geometry.coordinates[1]}}
+                            // position={{lat: mark.geometry.coordinates[0], lng: mark.geometry.coordinates[1]}}
+                            position={{lat: (latitude ? latitude : mark.geometry.coordinates[0]), lng: (longitude ? longitude : mark.geometry.coordinates[1])}}
                             // label="D"
                             icon={{
                                 url: `/skateboarding.svg`,
@@ -89,7 +96,8 @@ class Map extends Component {
                 componentRestrictions={{country: "ng"}}
             />
             </GoogleMap>
-        ))
+            )
+        }))
         return(
             <div className="" style={{marginLeft: "1.5rem", marginTop: "1rem"}}>
                 <CrashMap 

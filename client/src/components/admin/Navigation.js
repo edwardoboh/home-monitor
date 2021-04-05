@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Collapse,
   Navbar,
@@ -19,7 +19,32 @@ import Map from './Map';
 import Hospital from './Hospitals';
 import Device from './Device';
 
+// Socket IO import
+import io from 'socket.io-client'
+let socket;
+const ENDPOINT = '/'
+
 function Navigation(){
+
+  useEffect(() => {
+    socket = io(ENDPOINT)
+    console.log("Client: Has connected to server socket")
+    socket.on("update", (sensorData, callback) => {
+      const {latitude, longitude, accelerometer} = sensorData
+      updateSensorData(sensorData)
+      // callback("Response Gotten")
+    })
+  },[ENDPOINT])
+
+
+  const updateSensorData = ({latitude, longitude, accelerometer}) => {
+    accelerometer = JSON.parse(accelerometer)
+    const {accX, accY, accZ} = accelerometer
+    setDeviceLocation({latitude, longitude, accX, accY, accZ})
+  }
+
+  const [deviceLocation, setDeviceLocation] = useState({latitude: null, longitude: null, accX: 0, accY: 0, accZ: 0})
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
@@ -29,6 +54,10 @@ function Navigation(){
     if(activeTab !== tab) setActiveTab(tab);
   }
 
+  const handleLogout = () => {
+    localStorage.clear()
+  }
+
   return (
     <div>
       <Navbar color="light" light expand="md">
@@ -36,12 +65,8 @@ function Navigation(){
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-          <NavbarText>Welcome</NavbarText>
             <NavItem>
-              <NavLink href="/">Logout</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+              <NavLink href="/" onClick={handleLogout}>Logout</NavLink>
             </NavItem>
           </Nav>
         </Collapse>
@@ -79,13 +104,13 @@ function Navigation(){
         <TabPane tabId="1">
           <Row>
             <Col sm="12">
-              <Map />
+              <Map devLoc={deviceLocation}/>
             </Col>
           </Row>
         </TabPane>
         <TabPane tabId="2">
           <Row>
-            <Device />
+            <Device devLoc={deviceLocation}/>
           </Row>
         </TabPane>
         <TabPane tabId="3">
