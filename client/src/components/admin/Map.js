@@ -11,6 +11,7 @@ import {connect} from 'react-redux'
 
 import {getHospitals} from '../../actions/hospitalActions'
 import {getDevices} from '../../actions/deviceActions'
+import mapStyles from './mapStyles'
 
 // import * as deviceData from './data/deviceData.json'
 // import * as hospitalData from './data/hospitalData.json'
@@ -65,6 +66,7 @@ class Map extends Component {
                 defaultZoom={this.state.zoom}
                 defaultCenter={this.state.mapPosition}
                 // defaultCenter={deviceCenter}
+                defaultOptions={{styles: mapStyles}}
             >
                 {hospitalPositions && hospitalPositions.map((mark) => 
                 <Marker
