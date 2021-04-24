@@ -57,6 +57,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import {useHistory} from 'react-router-dom'
 
 function Copyright() {
   return (
@@ -111,13 +112,20 @@ export default function Login() {
   const EMAIL = "admin@gmail.com"
   const PASSWORD = "admin"
 
+  const routeHistory = useHistory()
+
   const compareDetails = () => {
     if(email === EMAIL && password === PASSWORD){
       localStorage.setItem("isAuthenticated", "true")
     }else{
       localStorage.setItem("isAuthenticated", "false")
     }
+    routeHistory.push("/dashboard")
   }
+
+  // const formSubmit = (e) => {
+  //   e.preventDefault()
+  // }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -161,7 +169,7 @@ export default function Login() {
               label="Remember me"
             />
             <Button
-              type="submit"
+              // type="submit"
               fullWidth
               variant="contained"
               color="primary"

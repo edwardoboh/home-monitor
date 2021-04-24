@@ -19,7 +19,7 @@ const PrivateRoute = (props) => {
             {...rest}
             render = { () => {
                 // return state.isAuthenticated || isAuth === "true" ? children : <Redirect to="/signin" />
-                return isAuth === "true" ? children : <Redirect to="/signin" />
+                return isAuth === "true" ? children : <Redirect to="/login" />
             }}
         />
     )
