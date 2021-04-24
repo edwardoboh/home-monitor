@@ -14,8 +14,9 @@ module.exports = (io) => {
 
     })
 
-    // GET      :[url]/sensor
+    // *********************************************TEST ROUTES BEGIN*********************************
 
+    // GET      :[url]/sensor
     route.get("/", (req, res) => {
         Device.find((err, resp) => {
             if(err){
@@ -36,10 +37,13 @@ module.exports = (io) => {
         })
     })
 
+    // *********************************************TEST ROUTES END*********************************
+
     // GET      :[url]/sensor/update/?[queryString]
-    route.get("/update", (req, res) => {
-        const {} = req.query
-    })
+    // route.get("/update", (req, res) => {
+    //     const {} = req.query
+    // })
+
 
     // POST     :[url]/sensor/update
     route.post("/update", (req, res) => {

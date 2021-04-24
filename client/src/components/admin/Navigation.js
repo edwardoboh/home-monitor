@@ -40,10 +40,12 @@ function Navigation(){
   const updateSensorData = ({latitude, longitude, accelerometer}) => {
     accelerometer = JSON.parse(accelerometer)
     const {accX, accY, accZ} = accelerometer
+    latitude = parseFloat(latitude)
+    longitude = parseFloat(longitude)
     setDeviceLocation({latitude, longitude, accX, accY, accZ})
   }
 
-  const [deviceLocation, setDeviceLocation] = useState({latitude: null, longitude: null, accX: 0, accY: 0, accZ: 0})
+  const [deviceLocation, setDeviceLocation] = useState({latitude: 6.393265751333534, longitude: 5.619564868102384, accX: 0, accY: 0, accZ: 0})
 
   const [isOpen, setIsOpen] = useState(false);
 

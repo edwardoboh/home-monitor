@@ -42,10 +42,15 @@ class Map extends Component {
     componentDidMount(){
         // get all hospitals and device location and set it to state
         this.props.getHospitals()
-        // this.props.getDevices()
+        this.props.getDevices()
 
         // Set the state to center the map
     }
+
+    // componentDidUpdate(){
+    //     let {latitude, longitude} = this.props.devLoc
+    //     this.setState({mapPosition: {lat: latitude, lng: longitude}})
+    // }
 
     toSelectedLocation = (place) => {
         this.setState({mapPosition: {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()}})
@@ -59,14 +64,15 @@ class Map extends Component {
         const {hospitalPositions} = this.props.hospitals
         const {devicePositions} = this.props.devices
         // const deviceCenter = {lat: devicePositions[0].geometry.coordinates[0], lng: devicePositions[0].geometry.coordinates[1]}
-
+        
+        const deviceCenter = {lat: latitude, lng: longitude}
         // const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
         CrashMap = withScriptjs(withGoogleMap(() => {
             return(
             <GoogleMap
                 defaultZoom={this.state.zoom}
-                defaultCenter={this.state.mapPosition}
-                // defaultCenter={deviceCenter}
+                // defaultCenter={this.state.mapPosition}
+                defaultCenter={deviceCenter}
                 defaultOptions={{styles: mapStyles}}
             >
                 {hospitalPositions && hospitalPositions.map((mark) => 
