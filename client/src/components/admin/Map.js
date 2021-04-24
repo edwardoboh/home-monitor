@@ -16,7 +16,8 @@ import mapStyles from './mapStyles'
 // import * as deviceData from './data/deviceData.json'
 // import * as hospitalData from './data/hospitalData.json'
 
-const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
+// const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
+const api_key = "AIzaSyC2gvpIAVI9BzKmiPR4rwmLHv68Q91P0bE"
 let CrashMap;
 
 class Map extends Component {
