@@ -11,26 +11,34 @@ import Login from './components/Login'
 
 
 function App() {
+  // return (
+  //   <Provider store={store}>
+  //   <Router>
+  //     <Switch>
+  //       <Route exact path="/">
+  //         <Redirect to="/login" />
+  //       </Route>
+  //       <PublicRoute path="/login">
+  //           <Login />
+  //       </PublicRoute>
+  //       <PrivateRoute path="/dashboard">
+        
+  //         <div className="App">
+  //           {/* <Welcome /> */}
+  //           <Navigation />
+  //           {/* <CompTest /> */}
+  //         </div>
+
+  //       </PrivateRoute>
+  //     </Switch>
+  //   </Router>
+  //   </Provider>
+    
+  // );
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <Redirect to="/login" />
-        </Route>
-        <PublicRoute path="/login">
-            <Login />
-        </PublicRoute>
-        <PrivateRoute path="/dashboard">
-        <Provider store={store}>
-          <div className="App">
-            {/* <Welcome /> */}
-            <Navigation />
-            {/* <CompTest /> */}
-          </div>
-        </Provider>
-        </PrivateRoute>
-      </Switch>
-    </Router>
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
     
   );
 }
