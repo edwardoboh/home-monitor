@@ -33,7 +33,7 @@ app.use("/device", require("./routes/ui/deviceRoutes"))
 app.use("/sensor", require("./routes/sensor")(io))
 // app.use("/sensor", require("./routes/sensor")(DeviceSocket))
 
-if(process.env.NODE_ENV === "production"){
+if(process.env.NODE_ENV == "production"){
     app.use(express.static("client/build"))
 
     app.get("*", (req, res) => {

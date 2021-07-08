@@ -27,24 +27,60 @@ module.exports = (io) => {
     })
 
     // GET      :[url]/sensor/{id}
-    route.get("/:id", (req, res) => {
-        Device.findById(req.params.id).then(resp => {
-            res.json({data: resp, msg: "Device successfully found"})
-        })
-        .catch(e => {
-            console.log("Unable to get single Device from server")
-            res.json({data: "", msg: "Unable to get single Device from server"})
-        })
-    })
+    // route.get("/:id", (req, res) => {
+    //     Device.findById(req.params.id).then(resp => {
+    //         res.json({data: resp, msg: "Device successfully found"})
+    //     })
+    //     .catch(e => {
+    //         console.log("Unable to get single Device from server")
+    //         res.json({data: "", msg: "Unable to get single Device from server"})
+    //     })
+    // })
 
     // *********************************************TEST ROUTES END*********************************
 
-    // GET      :[url]/sensor/update/?[queryString]
-    // route.get("/update", (req, res) => {
-    //     const {} = req.query
-    // })
+    // Using GET REQUEST FOR UPDATES
+    // GET     :[url]/sensor/update
+    route.get("/update", (req, res) => {
+        let id;
+        const {latitude, longitude, accX, accY, accZ} = req.query
+        const accData = {
+            accX,
+            accY,
+            accZ
+        }
+        const accelerometer = JSON.stringify(accData)
+        
+        // Emitting Event to the Client
+        if(DeviceSocket === ""){}
+        else{
+            // Remember to add address to the emitted message
+            DeviceSocket.emit("update", {latitude, longitude, accelerometer}, (message) => {
+                // console.log(message)
+            })
+            // console.log("Server: Emmited data from server")
+        }
+        
+        Device.find((err, resp) => {
+            if(err){
+                return res.json({data: "", msg: "Error in server: Couldn't get 1st Device"})
+            }
+            id = resp[0]._id
+        })
+        
+        // Perform Geolocation with GMap API to get address from LngLat values
+        const address = "Not Set yet"
+        Device.updateOne({_id: id}, {$set : {latitude, longitude, accelerometer}}, (err, resp2) => {
+            if(err){
+                return res.json({data: "", msg: "Error in server trying to update Device"})
+            }
+            // OPTIONAL: Send a response to the user if you'd like
+        })
+        res.end("Update Successful")
+    })
 
 
+    // USING POST REQUESTS FOR UPDATE
     // POST     :[url]/sensor/update
     route.post("/update", (req, res) => {
         let id;
@@ -83,7 +119,7 @@ module.exports = (io) => {
         })
         res.end("Update Successful")
     })
-
+    
     return route
 }
 
