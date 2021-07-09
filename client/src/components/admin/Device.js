@@ -64,6 +64,7 @@ class Device extends Component {
 
     render(){
         const {devicePositions} = this.props.devices
+        console.log(devicePositions)
         // console.log(this.props)
         // const {deviceName, deviceId, address, accelerometer, shock, lastUpdate} = devicePositions[0].properties
         // const {coordinates} = devicePositions[0].geometry
@@ -94,9 +95,9 @@ class Device extends Component {
                 {
                     devicePositions.map(device => {
                         // console.log(this.props)
-                        const {deviceName, deviceId, address, shock, accelerometer, lastUpdate} = device.properties
+                        const {deviceName, deviceId, address, accelerometer, lastUpdate} = device.properties
                         const {coordinates} = device.geometry
-                        const {latitude, longitude, accX, accY, accZ} = this.props.devLoc 
+                        const {latitude, longitude, accX, accY, accZ, shock} = this.props.devLoc 
                         // const {accX, accY, accZ} = JSON.parse(accelerometer)
                             return(
                                 <div key={device.properties.id}>

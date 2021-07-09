@@ -30,22 +30,22 @@ function Navigation(){
     socket = io(ENDPOINT)
     console.log("Client: Has connected to server socket")
     socket.on("update", (sensorData, callback) => {
-      const {latitude, longitude, accelerometer} = sensorData
+      const {latitude, longitude, accelerometer, shock} = sensorData
       updateSensorData(sensorData)
       // callback("Response Gotten")
     })
   },[ENDPOINT])
 
 
-  const updateSensorData = ({latitude, longitude, accelerometer}) => {
+  const updateSensorData = ({latitude, longitude, accelerometer, shock}) => {
     accelerometer = JSON.parse(accelerometer)
     const {accX, accY, accZ} = accelerometer
     latitude = parseFloat(latitude)
     longitude = parseFloat(longitude)
-    setDeviceLocation({latitude, longitude, accX, accY, accZ})
+    setDeviceLocation({latitude, longitude, accX, accY, accZ, shock})
   }
 
-  const [deviceLocation, setDeviceLocation] = useState({latitude: 6.393265751333534, longitude: 5.619564868102384, accX: 0, accY: 0, accZ: 0})
+  const [deviceLocation, setDeviceLocation] = useState({latitude: 6.393265751333534, longitude: 5.619564868102384, accX: 0, accY: 0, accZ: 0, shock: false})
 
   const [isOpen, setIsOpen] = useState(false);
 
