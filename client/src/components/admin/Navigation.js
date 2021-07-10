@@ -24,6 +24,10 @@ import io from 'socket.io-client'
 let socket;
 const ENDPOINT = '/'
 
+// MAP API KEYS
+// const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
+const api_key = "AIzaSyC2gvpIAVI9BzKmiPR4rwmLHv68Q91P0bE"
+let minID;
 function Navigation(){
 
   useEffect(() => {
@@ -34,7 +38,26 @@ function Navigation(){
       updateSensorData(sensorData)
       // callback("Response Gotten")
     })
+    socket.on("matrix", (matrixData) => {
+      setMatrixDataState([...matrixData])
+      minID = minDistanceHospital(matrixData)
+      console.log("minID: ", minID)
+      console.log("MATRIX RECEIVED IN CLIENT: ", matrixData)
+    })
   },[ENDPOINT])
+
+  // Calculate to get hospital with minimum distance
+  const minDistanceHospital = (matDat) => {
+    let minDist = 2000000
+    let minId
+    matDat.forEach(mat => {
+      if(mat.distance.distance.value < minDist){
+        minDist = mat.distance.distance.value
+        minId = mat.hospital._id
+      }
+    })
+    return minId
+  }
 
 
   const updateSensorData = ({latitude, longitude, accelerometer, shock}) => {
@@ -46,6 +69,8 @@ function Navigation(){
   }
 
   const [deviceLocation, setDeviceLocation] = useState({latitude: 6.393265751333534, longitude: 5.619564868102384, accX: 0, accY: 0, accZ: 0, shock: false})
+
+  const [matrixDataState, setMatrixDataState] = useState([])
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -106,7 +131,7 @@ function Navigation(){
         <TabPane tabId="1">
           <Row>
             <Col sm="12">
-              <Map devLoc={deviceLocation}/>
+              <Map devLoc={deviceLocation} api_key={api_key}/>
             </Col>
           </Row>
         </TabPane>
@@ -117,7 +142,7 @@ function Navigation(){
         </TabPane>
         <TabPane tabId="3">
           <Row>
-            <Hospital />
+            <Hospital devLoc={deviceLocation} api_key={api_key} matrix={matrixDataState} minId={minID}/>
           </Row>
         </TabPane>
       </TabContent>

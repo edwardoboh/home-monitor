@@ -16,8 +16,6 @@ import mapStyles from './mapStyles'
 // import * as deviceData from './data/deviceData.json'
 // import * as hospitalData from './data/hospitalData.json'
 
-// const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
-const api_key = "AIzaSyC2gvpIAVI9BzKmiPR4rwmLHv68Q91P0bE"
 let CrashMap;
 
 class Map extends Component {
@@ -59,7 +57,7 @@ class Map extends Component {
     render(){
         // Device Location from Socket
         let {latitude, longitude} = this.props.devLoc
-
+        
         // get state values from redux store
         const {hospitalPositions} = this.props.hospitals
         const {devicePositions} = this.props.devices
@@ -67,6 +65,7 @@ class Map extends Component {
         
         const deviceCenter = {lat: latitude, lng: longitude}
         // const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
+        const {api_key} = this.props
         CrashMap = withScriptjs(withGoogleMap(() => {
             return(
             <GoogleMap

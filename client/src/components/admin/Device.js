@@ -107,7 +107,7 @@ class Device extends Component {
                                         <CardBody>
                                             <CardTitle tag="h5">Name: {`${deviceName}`}</CardTitle>
                                             <CardSubtitle tag="h7" className="mb-2 text-muted">ID: {`${deviceId}`}</CardSubtitle><br />
-                                            Shock State: <Badge pill>{`${shock ? "TRUE" : "FALSE"}`}</Badge><br />
+                                            Shock State: <Badge pill color={shock ? "danger": "primary"}>{`${shock ? "TRUE" : "FALSE"}`}</Badge><br />
                                             Address: <Badge pill>{`${address}`}</Badge><br />
                                             {/* Latitude: <Badge color="secondary" pill>{`${coordinates[0]}`}</Badge><br />
                                             Longitude: <Badge pill>{`${coordinates[1]}`}</Badge><br /> */}
