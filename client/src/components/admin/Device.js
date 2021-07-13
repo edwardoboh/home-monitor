@@ -17,27 +17,34 @@ import {
 } from 'reactstrap'
 import {connect} from 'react-redux'
 import { getDevices, getDistance, addDevice } from '../../actions/deviceActions'
+// Socket IO import
+import socket from '../socket'
 
 class Device extends Component {
     constructor(props){
-        super()
+        super(props)
         this.state = {
-                device: {
-        
-                },
-                distance: {
-        
-                },
-                deviceName: "",
-                deviceId: "",
-                modal: false
-            }
+            device: {
+            },
+            distance: {
+            },
+            deviceName: "",
+            deviceId: "",
+            modal: false,
+            devLoc: props.devLoc,
+        }
+        console.log("Client: Has connected to server socket")
+        socket.on("updateAgain", (sensorData) => {
+            props.getDevices()
+            props.getDevices()
+            // console.log("Socket Update Again")
+        })
     }
-
+    
     componentDidMount(){
-        // get Device states and set state here
         this.props.getDevices()
         // this.props.getDistance()
+        
     }
 
     refreshData = () => {
@@ -58,17 +65,12 @@ class Device extends Component {
             deviceName: this.state.deviceName,
             deviceId: this.state.deviceId
         }
-
         this.props.addDevice(deviceDetails)
     }
 
     render(){
         const {devicePositions} = this.props.devices
-        console.log(devicePositions)
-        // console.log(this.props)
-        // const {deviceName, deviceId, address, accelerometer, shock, lastUpdate} = devicePositions[0].properties
-        // const {coordinates} = devicePositions[0].geometry
-        // const {accX, accY, accZ} = JSON.parse(accelerometer)
+        console.log(this.state.devLoc)
         return(
             <div className="container" style={{marginTop: "2rem"}}>
                 <Button onClick={this.toggleModal} color="dark" block style={{marginBottom:"1.5rem"}}>Edit Device</Button>
@@ -94,13 +96,10 @@ class Device extends Component {
                 {/*  */}
                 {
                     devicePositions.map(device => {
-                        // console.log(this.props)
-                        const {deviceName, deviceId, address, accelerometer, lastUpdate} = device.properties
-                        const {coordinates} = device.geometry
-                        const {latitude, longitude, accX, accY, accZ, shock} = this.props.devLoc 
-                        // const {accX, accY, accZ} = JSON.parse(accelerometer)
+                        const {deviceName, deviceId, address, accX, accY, accZ, latitude, longitude, lastUpdate, shock} = device
+                        // const {latitude, longitude, accX, accY, accZ, shock} = this.props.devLoc 
                             return(
-                                <div key={device.properties.id}>
+                                <div key={device.id}>
                                     <Card md="10" xs="6" sm="8">
                                         {/* <CardImg top width="" src="/dev3.jpg" alt="Card image cap" /> */}
                                         <img width="10%" src="/dev3.jpg" alt="device" />

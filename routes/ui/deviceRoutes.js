@@ -6,23 +6,24 @@ const Device = require("../../model/Devices")
 route.get("/", (req, res) => {
     Device.find().then(resp => {
         // Reformat the data before sending it to the client
-        let Devices = []
-        resp.forEach(devResp => {
-            let properties = {
-                id: devResp._id,
-                deviceName: devResp.deviceName,
-                deviceId: devResp.deviceId,
-                lastUpdate: devResp.lastUpdate,
-                address: devResp.address,
-                accelerometer: devResp.accelerometer,
-                shock: false
-            }
-            let geometry = {
-                coordinates: [devResp.latitude, devResp.longitude]
-            }
-            Devices.push({properties, geometry})
-        })
-        res.json({data: Devices, msg: "GET all Device Successful"})
+        // let Devices = []
+        // resp.forEach(devResp => {
+        //     let properties = {
+        //         id: devResp._id,
+        //         deviceName: devResp.deviceName,
+        //         deviceId: devResp.deviceId,
+        //         lastUpdate: devResp.lastUpdate,
+        //         address: devResp.address,
+        //         accelerometer: devResp.accelerometer,
+        //         shock: false
+        //     }
+        //     let geometry = {
+        //         coordinates: [devResp.latitude, devResp.longitude]
+        //     }
+        //     Devices.push({properties, geometry})
+        // })
+        // res.json({data: Devices, msg: "GET all Device Successful"})
+        res.json({data: resp, msg: "GET all Device Successful"})
     })
     .catch(e => {
         console.log("Unable to get all Devices")
@@ -43,17 +44,30 @@ route.get("/:id", (req, res) => {
 
 // POST     :[url]/device/add
 route.post("/add", (req, res) => {
-    const {properties, geometry} = req.body
-    const {accX, accY, accZ} = properties
+    // const {properties, geometry} = req.body
+    // const {accX, accY, accZ} = properties
+    // const device = new Device({
+    //     deviceName: properties.deviceName,
+    //     deviceId: properties.deviceId,
+    //     address: properties.address,
+    //     longitude: geometry.coordinates[1],
+    //     latitude: geometry.coordinates[0],
+    //     accelerometer: JSON.stringify({accX, accY, accZ}),
+    //     shock: false
+    // })
+    const {deviceId, deviceName, address, longitude, latitude, accX, accY, accZ} = req.body
     const device = new Device({
-        deviceName: properties.deviceName,
-        deviceId: properties.deviceId,
-        address: properties.address,
-        longitude: geometry.coordinates[1],
-        latitude: geometry.coordinates[0],
-        accelerometer: JSON.stringify({accX, accY, accZ}),
-        shock: false
-    })
+            deviceName,
+            deviceId,
+            address,
+            longitude,
+            latitude,
+            accX,
+            accY,
+            accZ,
+            shock: false
+        })
+
 
     device.save((err, resp) => {
         if(err){

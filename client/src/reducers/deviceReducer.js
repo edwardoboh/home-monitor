@@ -21,6 +21,8 @@ const deviceReducer = (state = initialState, action) => {
                 distances: action.payload
 
             }
+        
+        // **************************** TESTING ***********************************
         case ADD_DEVICE:
             return {
                 ...state,

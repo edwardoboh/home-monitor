@@ -22,10 +22,13 @@ const DeviceSchema = new Schema({
         type: Number,
         required: false
     },
-    accelerometer: {
-        type: String,
-        required: false
-    },
+    // accelerometer: {
+    //     type: String,
+    //     required: false
+    // },
+    accX: String,
+    accY: String,
+    accZ: String,
     shock: {
         type: Boolean
     },

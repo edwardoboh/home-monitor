@@ -20,7 +20,7 @@ let CrashMap;
 
 class Map extends Component {
     constructor(props){
-        super()
+        super(props)
         this.state = {
             zoom: 14,
             address: "",
@@ -31,7 +31,8 @@ class Map extends Component {
             markerPosition: {
                 lat: "",
                 lng: ""
-            }
+            },
+            // deviceCenter = {lat: 6.331745043250994, lng: 5.623306914417808}
             // hospitalPositions: hospitalData,
             // devicePositions: deviceData
         }
@@ -45,11 +46,6 @@ class Map extends Component {
         // Set the state to center the map
     }
 
-    // componentDidUpdate(){
-    //     let {latitude, longitude} = this.props.devLoc
-    //     this.setState({mapPosition: {lat: latitude, lng: longitude}})
-    // }
-
     toSelectedLocation = (place) => {
         this.setState({mapPosition: {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()}})
     }
@@ -58,13 +54,11 @@ class Map extends Component {
         // Device Location from Socket
         let {latitude, longitude} = this.props.devLoc
         
-        // get state values from redux store
         const {hospitalPositions} = this.props.hospitals
         const {devicePositions} = this.props.devices
         // const deviceCenter = {lat: devicePositions[0].geometry.coordinates[0], lng: devicePositions[0].geometry.coordinates[1]}
         
         const deviceCenter = {lat: latitude, lng: longitude}
-        // const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
         const {api_key} = this.props
         CrashMap = withScriptjs(withGoogleMap(() => {
             return(
@@ -85,13 +79,13 @@ class Map extends Component {
                     
                 {devicePositions && devicePositions.map((mark) => 
                         <Marker
-                            key={mark.properties.id}
+                            key={mark.id}
                             // position={{lat: mark.geometry.coordinates[0], lng: mark.geometry.coordinates[1]}}
-                            position={{lat: (latitude ? latitude : mark.geometry.coordinates[0]), lng: (longitude ? longitude : mark.geometry.coordinates[1])}}
+                            position={{lat: (latitude ? latitude : mark.latitude), lng: (longitude ? longitude : mark.longitude)}}
                             // label="D"
                             icon={{
-                                url: `/skateboarding.svg`,
-                                scaledSize: new window.google.maps.Size(25, 25)
+                                url: `/car2.svg`,
+                                scaledSize: new window.google.maps.Size(40, 40)
                             }}
                         >
                         </Marker>

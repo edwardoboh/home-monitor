@@ -3,7 +3,16 @@ const route = express.Router()
 const Device = require("../../model/Devices")
 const Hospitals = require("../../model/Hospitals")
 const distance = require("google-distance-matrix")
+const nodeGeocoder = require("node-geocoder")
 const api_key = "AIzaSyC2gvpIAVI9BzKmiPR4rwmLHv68Q91P0bE"
+let option = {
+    provider: 'google',
+    // Optional depending on the providers
+    // fetch: customFetchImplementation,
+    apiKey: api_key, // for Mapquest, OpenCage, Google Premier
+    formatter: null // 'gpx', 'string', ...
+}
+const geocoder = nodeGeocoder(option)
 
 let DeviceSocket = ""
 
@@ -21,6 +30,7 @@ module.exports = (io) => {
     distance.key(api_key)
     // distance.units("imperial")
 
+    /**************************************DISTANCE CALCULATION BEGIN********************************************/
     /*
     function calculateMatrix(){
         Device.find((err, resp) => {
@@ -50,6 +60,7 @@ module.exports = (io) => {
         })
     }
     */
+    /**************************************DISTANCE CALCULATION END********************************************/
     
 
 
@@ -83,44 +94,56 @@ module.exports = (io) => {
     route.get("/update", async (req, res) => {
         let id;
         let {latitude, longitude, accX, accY, accZ, shock} = req.query
-        const accData = {
-            accX,
-            accY,
-            accZ
+        // const accData = {
+        //     accX,
+        //     accY,
+        //     accZ
+        // }
+        // const accelerometer = JSON.stringify(accData)
+        // console.log("Type of Shock Before: ", shock)
+        // shock = Boolean(shock)
+        if(shock.toLowerCase() === "true"){
+            shock = true
+        }else{
+            shock = false
         }
-        shock = Boolean(shock)
-        const accelerometer = JSON.stringify(accData)
+        // console.log("Type of Shock After: ", shock)
         
         // Emitting Event to the Client
         if(DeviceSocket === ""){}
         else{
             // Remember to add address to the emitted message
-            DeviceSocket.emit("update", {latitude, longitude, accelerometer, shock}, (message) => {
-                // console.log(message)
-            })
-            // console.log("Server: Emmited data from server")
+            DeviceSocket.emit("update", {latitude, longitude, accX, accY, accZ, shock})
+            DeviceSocket.emit("updateAgain")
+            console.log("Server: Emmited data from server")
         }
-        
-        Device.find((err, resp) => {
+
+        // DeviceSocket.emit("update")
+        Device.find(async (err, resp) => {
             if(err){
                 return res.json({data: "", msg: "Error in server: Couldn't get 1st Device"})
             }
             id = resp[0]._id
-
-            // Calculate distance to all hospitals
-            // printThis = calculateMatrix()
-            // console.log("Print This: ", printThis)
         
             // Perform Geolocation with GMap API to get address from LngLat values
-            const address = "Not Set yet"
-            Device.updateOne({_id: id}, {$set: {latitude, longitude, accelerometer, shock, lastUpdate: Date.now()}}, (err, resp2) => {
+           
+            const address = await geocoder.reverse({lat: latitude, lon: longitude})
+            // console.log(address[0].formattedAddress)
+            
+
+            Device.updateOne({_id: id}, {$set: {address: address[0].formattedAddress,latitude, longitude, accX, accY, accZ, shock, lastUpdate: Date.now()}}, (err, resp2) => {
                 if(err){
                     return res.json({data: "", msg: "Error in server trying to update Device"})
                 }
-            /***************************************************************************************/
+
+
+            /******************************************DISTANCE MATRIX BEGIN*********************************************/
             
-                let nlatitude = resp[0].latitude
-                let nlongitude = resp[0].longitude
+                // let nlatitude = resp[0].latitude
+                // let nlongitude = resp[0].longitude
+                // let originLoc = [`${nlatitude},${nlongitude}`]
+                let nlatitude = latitude
+                let nlongitude = longitude
                 let originLoc = [`${nlatitude},${nlongitude}`]
                 Hospitals.find((err2b, resp2b) => {
                     if(err2b){
@@ -128,16 +151,14 @@ module.exports = (io) => {
                     }
                     destinationLoc = resp2b.map(hospital => `${hospital.latitude},${hospital.longitude}`)
                     distance.matrix(originLoc, destinationLoc, (err, resp3) => {
-                        // console.log("All Distances: ", resp3.rows[0].elements)
                         let distanceData = resp3.rows[0].elements
                         let allHospitalDistanceData = distanceData.map((data, index) => ({hospital: resp2b[index], distance: data}))
-                        // console.log(allHospitalDistanceData)
                         // return allHospitalDistanceData
                         DeviceSocket.emit("matrix", allHospitalDistanceData)
                     })
                 })
             
-            /***************************************************************************************/
+            /*******************************************DISTANCE MATRIX END********************************************/
 
                 // OPTIONAL: Send a response to the user if you'd like
                 return res.json({data: resp2})

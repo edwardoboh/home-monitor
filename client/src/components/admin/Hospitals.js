@@ -20,10 +20,7 @@ import {connect} from 'react-redux'
 
 import {addHospital, getHospitals} from '../../actions/hospitalActions'
 
-import axios from 'axios'
-
-let minDis = 2000000
-let foundCount = 0
+// import axios from 'axios'
 class Hospital extends Component {
     constructor(props){
         super(props)
@@ -40,8 +37,7 @@ class Hospital extends Component {
             },
             modal: false,
             search: null,
-            matrix: [...props.matrix],
-            // minDis: 2000000
+            matrix: [...props.matrix]
         }
     }
 
@@ -49,10 +45,6 @@ class Hospital extends Component {
         // function to get all hospitals
         this.props.getHospitals()
         // this.hospitalDistance()
-    }
-
-    componentDidUpdate(){
-        minDis = 2000000
     }
 
 /**

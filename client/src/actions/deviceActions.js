@@ -4,9 +4,9 @@ import axios from 'axios'
 export const getDevices = () => dispatch => {
     
     // http request to backend to get all hospitals
-    console.log("Before Axios Device get request")
+    // console.log("Before Axios Device get request")
     axios.get("/device").then(devices => {
-        console.log("deviceActions: ", devices)
+        // console.log("deviceActions: ", devices)
         dispatch({
             type: GET_DEVICES,
             payload : devices.data.data
@@ -21,6 +21,8 @@ export const getDistance = () => {
         payload: {}
     }
 }
+
+// **************************** TESTING ***********************************
 
 export const addDevice = (data) => {
     // http request to backend to add a single hospital

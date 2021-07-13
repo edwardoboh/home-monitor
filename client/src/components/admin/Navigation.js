@@ -18,11 +18,10 @@ import classnames from 'classnames'
 import Map from './Map';
 import Hospital from './Hospitals';
 import Device from './Device';
+// import { getDevices, getDistance } from '../../actions/deviceActions'
 
 // Socket IO import
-import io from 'socket.io-client'
-let socket;
-const ENDPOINT = '/'
+import socket from '../socket'
 
 // MAP API KEYS
 // const api_key = "AIzaSyDNXkOCTcRTz9itRiFN9N8CziIEL9eLc5w"
@@ -31,11 +30,11 @@ let minID;
 function Navigation(){
 
   useEffect(() => {
-    socket = io(ENDPOINT)
     console.log("Client: Has connected to server socket")
     socket.on("update", (sensorData, callback) => {
-      const {latitude, longitude, accelerometer, shock} = sensorData
+      // const {latitude, longitude, accX, accY, accZ, shock} = sensorData
       updateSensorData(sensorData)
+      // getDevices()
       // callback("Response Gotten")
     })
     socket.on("matrix", (matrixData) => {
@@ -44,7 +43,7 @@ function Navigation(){
       console.log("minID: ", minID)
       console.log("MATRIX RECEIVED IN CLIENT: ", matrixData)
     })
-  },[ENDPOINT])
+  },[])
 
   // Calculate to get hospital with minimum distance
   const minDistanceHospital = (matDat) => {
@@ -60,9 +59,7 @@ function Navigation(){
   }
 
 
-  const updateSensorData = ({latitude, longitude, accelerometer, shock}) => {
-    accelerometer = JSON.parse(accelerometer)
-    const {accX, accY, accZ} = accelerometer
+  const updateSensorData = ({latitude, longitude, accX, accY, accZ, shock}) => {
     latitude = parseFloat(latitude)
     longitude = parseFloat(longitude)
     setDeviceLocation({latitude, longitude, accX, accY, accZ, shock})
@@ -137,7 +134,7 @@ function Navigation(){
         </TabPane>
         <TabPane tabId="2">
           <Row>
-            <Device devLoc={deviceLocation}/>
+            <Device socket={socket} devLoc={deviceLocation}/>
           </Row>
         </TabPane>
         <TabPane tabId="3">
