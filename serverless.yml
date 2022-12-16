@@ -1,0 +1,25 @@
+service: home-monitor
+custom:
+  secrets: ${file(secrets.json)}
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-east-1
+  environment:
+    MONGO_URI: ${self:custom.secrets.MONGO_URI}
+    NODE_ENV: ${self:custom.secrets.NODE_ENV}
+    MY_ACCESS_KEY_ID: ${self:custom.secrets.MY_ACCESS_KEY_ID}
+    MY_SECRET_ACCESS_KEY: ${self:custom.secrets.MY_SECRET_ACCESS_KEY}
+functions:
+  app:
+    handler: handler.app
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true

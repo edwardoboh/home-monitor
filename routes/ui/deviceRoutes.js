@@ -71,7 +71,7 @@ route.post("/add", (req, res) => {
 
     device.save((err, resp) => {
         if(err){
-            console.log("Error adding a device in server")
+            console.log({error: err.message})
             return res.json({data: "", msg: "Error Adding a Device in Server"})
         }
         res.json({data: resp, msg: "Device successfully Added"})

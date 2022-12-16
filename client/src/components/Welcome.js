@@ -35,8 +35,8 @@ function Welcome () {
             </Modal>
             <Container>
             <Jumbotron style={{margin:"auto", width:"80%", marginTop:"5rem"}}>
-                <h1 className="display-3">Auto Crash</h1>
-                <p className="lead">Auto Crash App to monitor activities of connected endpoints</p>
+                <h1 className="display-3">Home Monitor</h1>
+                <p className="lead">Monitor activities of your device with the Home Monitor App</p>
                 <hr className="my-2" />
                 {/* <p>Click below to either signup or login</p> */}
                 <p className="lead">

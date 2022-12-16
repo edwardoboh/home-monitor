@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "client": "yarn start",
+    "dev": "concurrently \"npm run start\" \"cd client\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
@@ -19,6 +19,7 @@
     "google-distance-matrix": "^1.1.1",
     "mongoose": "^5.11.13",
     "node-geocoder": "^3.27.0",
+    "serverless-http": "^3.1.0",
     "socket.io": "^3.1.0"
   },
   "devDependencies": {
