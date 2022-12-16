@@ -22,7 +22,7 @@ route.get("/", (req, res) => {
             }
             allHomes.push({properties, geometry})
         })
-        res.json({data: allHospitals, msg: "Getting all Hospitals was successful"})
+        res.json({data: allHomes, msg: "Getting all Hospitals was successful"})
     })
 })
 

@@ -21,12 +21,6 @@ const io = socketio(server)
 
 // Connection to database
 mongoose.connect(process.env.MONGO_URI, {
-    auth: {
-        username: process.env.MY_ACCESS_KEY_ID,
-        password: process.env.MY_SECRET_ACCESS_KEY
-    },
-    authSource: '$external',
-    authMechanism: 'MONGODB-AWS',
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log("Connection to Database Successful"))
