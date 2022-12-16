@@ -93,7 +93,8 @@ module.exports = (io) => {
     // GET     :[url]/sensor/update
     route.get("/update", async (req, res) => {
         let id;
-        let {latitude, longitude, accX, accY, accZ, shock} = req.query
+        // let {latitude, longitude, accX, accY, accZ, shock} = req.query
+        let {latitude, longitude} = req.query
         // const accData = {
         //     accX,
         //     accY,
@@ -102,18 +103,18 @@ module.exports = (io) => {
         // const accelerometer = JSON.stringify(accData)
         // console.log("Type of Shock Before: ", shock)
         // shock = Boolean(shock)
-        if(shock.toLowerCase() === "true"){
-            shock = true
-        }else{
-            shock = false
-        }
+        // if(shock.toLowerCase() === "true"){
+        //     shock = true
+        // }else{
+        //     shock = false
+        // }
         // console.log("Type of Shock After: ", shock)
         
         // Emitting Event to the Client
         if(DeviceSocket === ""){}
         else{
             // Remember to add address to the emitted message
-            DeviceSocket.emit("update", {latitude, longitude, accX, accY, accZ, shock})
+            DeviceSocket.emit("update", {latitude, longitude})
             DeviceSocket.emit("updateAgain")
             console.log("Server: Emmited data from server")
         }
@@ -127,18 +128,20 @@ module.exports = (io) => {
         
             // Perform Geolocation with GMap API to get address from LngLat values
            
-            const address = await geocoder.reverse({lat: latitude, lon: longitude})
+            // let address = await geocoder.reverse({lat: latitude, lon: longitude})
+            // address = address[0].formattedAddress;
+            let address = "Unknown";
             // console.log(address[0].formattedAddress)
             
 
-            Device.updateOne({_id: id}, {$set: {address: address[0].formattedAddress,latitude, longitude, accX, accY, accZ, shock, lastUpdate: Date.now()}}, (err, resp2) => {
+            Device.findOneAndUpdate({_id: id}, {$set: {address, latitude, longitude, lastUpdate: Date.now()}}, {new: true}, (err, resp2) => {
                 if(err){
                     return res.json({data: "", msg: "Error in server trying to update Device"})
                 }
 
 
             /******************************************DISTANCE MATRIX BEGIN*********************************************/
-            
+            /*
                 // let nlatitude = resp[0].latitude
                 // let nlongitude = resp[0].longitude
                 // let originLoc = [`${nlatitude},${nlongitude}`]
@@ -157,11 +160,11 @@ module.exports = (io) => {
                         DeviceSocket.emit("matrix", allHospitalDistanceData)
                     })
                 })
-            
+            */
             /*******************************************DISTANCE MATRIX END********************************************/
 
                 // OPTIONAL: Send a response to the user if you'd like
-                return res.json({data: resp2})
+                res.status(201).json({data: resp2});
             })
         })
         // res.end("Update Successful")

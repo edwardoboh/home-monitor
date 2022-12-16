@@ -26,9 +26,18 @@ const DeviceSchema = new Schema({
     //     type: String,
     //     required: false
     // },
-    accX: String,
-    accY: String,
-    accZ: String,
+    accX: {
+        type: String,
+        default: 0
+    },
+    accY: {
+        type: String,
+        default: 0
+    },
+    accZ: {
+        type: String,
+        default: 0
+    },
     shock: {
         type: Boolean
     },
