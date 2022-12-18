@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "automobile crash report application in react and node",
   "main": "server.js",
+  "engines": {
+    "node": "14.21.1",
+    "npm": "6.14.17"
+  },
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
