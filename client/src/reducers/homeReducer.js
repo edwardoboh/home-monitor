@@ -20,7 +20,7 @@ const homeReducer = (state = initialState, action) => {
         case DELETE_HOME:
             return {
                 ...state,
-                homePositions: [state.homePositions.filter(hosPos => hosPos.id !== action.payload)]
+                homePositions: [...state.homePositions.filter(hosPos => hosPos.properties.id !== action.payload)]
             }
         default:
             return state

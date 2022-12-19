@@ -102,11 +102,10 @@ class Homes extends Component {
                 coordinates: [Number(this.state.newHome.longitude), Number(this.state.newHome.latitude)]
             }
         }
-        console.log(newHome)
-        this.props.addHome(newHome)
-
         // Check to see if add was successful and then call toggle
         this.toggleModal()
+        this.props.addHome(newHome)
+
     }
 
     toggleModal = () => {
@@ -146,6 +145,11 @@ class Homes extends Component {
         }
         return dist
         // return mColor[0].distance.distance.text
+    }
+
+    deleteHome = (homeId) => {
+        this.props.deleteHome(homeId);
+        return;
     }
 
     render(){
@@ -206,7 +210,7 @@ class Homes extends Component {
                     block
                     style={{marginBottom:"1.5rem"}}
                 >
-                    Create
+                    Add new Home
                 </Button>
                 <hr />
                 <br />
@@ -229,9 +233,19 @@ class Homes extends Component {
                                     </ListGroupItemText>
                                     <hr />
                                     <ListGroupItemText style={this.callColor(home.properties.id)}>
-                                        <strong>
-                                            Distance: {this.myDistance(home.properties.id)}
-                                        </strong>
+                                        <div>
+                                            <strong>
+                                                Distance: {this.myDistance(home.properties.id)}
+                                            </strong>
+                                            <Button
+                                                onClick={() => this.deleteHome(home.properties.id)}
+                                                className="float-right"
+                                                color="danger"
+                                                // style={{marginBottom:"1.5rem"}}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </div>
                                     </ListGroupItemText>
                                 </ListGroupItem>
                                 <br />
@@ -248,4 +262,4 @@ const mapStateToProps = (state) => ({
     homes: state.homes
 })
 
-export default connect(mapStateToProps, {addHome, getHomes})(Homes)
+export default connect(mapStateToProps, {addHome, getHomes, deleteHome})(Homes)

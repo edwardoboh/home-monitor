@@ -8,7 +8,7 @@ route.get("/", (req, res) => {
     Hospital.find((err, resp) => {
         if(err){
             console.log("Error getting all hospitals")
-            return res.json({data:"", msg:"Error getting all Hospitals"})
+            return res.json({data:[], msg:"Error getting all Hospitals"})
         }
         resp.forEach(respHospital => {
             let properties = {
