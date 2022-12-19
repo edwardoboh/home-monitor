@@ -4,7 +4,7 @@ const Device = require("../../model/Devices")
 
 // GET      :[url]/device
 route.get("/", (req, res) => {
-    Device.find({$sort: {_id: -1}}).then(resp => {
+    Device.find({}).sort({_id: -1}).then(resp => {
         // Reformat the data before sending it to the client
         // let Devices = []
         // resp.forEach(devResp => {

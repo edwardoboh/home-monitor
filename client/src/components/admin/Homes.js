@@ -161,6 +161,10 @@ class Homes extends Component {
                     <div>
                         <Form>
                             <FormGroup>
+                                <Label for="name">Name</Label>
+                                <Input type="name" name="name" id="name" placeholder="Enter a name for Home" onChange={this.homeInput} />
+                            </FormGroup>
+                            <FormGroup>
                                 <Label for="email">Email</Label>
                                 <Input type="email" name="email" id="email" placeholder="Enter email address" onChange={this.homeInput} />
                             </FormGroup>
