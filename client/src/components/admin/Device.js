@@ -5,6 +5,7 @@ import {
     CardTitle,
     CardSubtitle,
     CardText,
+    Table,
     Button,
     Modal,
     ModalBody,
@@ -76,7 +77,7 @@ class Device extends Component {
                 <Button onClick={this.toggleModal} color="dark" block style={{marginBottom:"1.5rem"}}>Edit Device</Button>
                 {/*  */}
                 <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Add Hospital</ModalHeader>
+                    <ModalHeader toggle={this.toggleModal}>Update Device Settings</ModalHeader>
                     <ModalBody>
                     <div>
                         <Form>
@@ -102,19 +103,37 @@ class Device extends Component {
                                 <div key={device.id}>
                                     <Card md="10" xs="6" sm="8">
                                         {/* <CardImg top width="" src="/dev3.jpg" alt="Card image cap" /> */}
-                                        <img width="10%" src="/dev3.jpg" alt="device" />
+                                        {/* <img width="10%" src="/dev3.jpg" alt="device" /> */}
                                         <CardBody>
-                                            <CardTitle tag="h5">Name: {`${deviceName}`}</CardTitle>
-                                            <CardSubtitle tag="h7" className="mb-2 text-muted">ID: {`${deviceId}`}</CardSubtitle><br />
-                                            Shock State: <Badge pill color={shock ? "danger": "primary"}>{`${shock ? "TRUE" : "FALSE"}`}</Badge><br />
-                                            Address: <Badge pill>{`${address}`}</Badge><br />
-                                            {/* Latitude: <Badge color="secondary" pill>{`${coordinates[0]}`}</Badge><br />
-                                            Longitude: <Badge pill>{`${coordinates[1]}`}</Badge><br /> */}
-                                            Latitude: <Badge color="secondary" pill>{`${latitude}`}</Badge><br />
-                                            Longitude: <Badge pill>{`${longitude}`}</Badge><br />
-                                            Accelerometer::   X: <Badge pill>{`${accX}`}</Badge>   Y: <Badge pill>{`${accY}`}</Badge>   Z: <Badge pill>{`${accZ}`}</Badge><br />
-                                            Last Update: <Badge pill>{`${lastUpdate}`}</Badge><br /><br />
-                                            <Button color="dark" onClick={this.refreshData}>Refresh</Button>
+                                            <Table>
+                                                <tbody>
+                                                    <tr>
+                                                        <th><CardTitle tag="h5">Name</CardTitle></th><th><CardTitle>{`${deviceName}`}</CardTitle></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><CardSubtitle tag="h7" className="mb-2 text-muted">ID</CardSubtitle></th><th><CardSubtitle>{`${deviceId}`}</CardSubtitle></th>
+                                                    </tr>
+                                                    {/* <tr>
+                                                        <td>Shock State</td> <td><Badge pill color={shock ? "danger": "primary"}>{`${shock ? "TRUE" : "FALSE"}`}</Badge></td>
+                                                    </tr> */}
+                                                    <tr>
+                                                        <td>Address</td> <td><Badge pill>{`${address}`}</Badge></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Latitude</td> <td><Badge color="secondary" pill>{`${latitude}`}</Badge></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Longitude</td> <td> <Badge pill>{`${longitude}`}</Badge></td>
+                                                    </tr>
+                                                    {/* <tr>
+                                                        <td>Accelerometer</td> <td> X: <Badge pill>{`${accX}`}</Badge>   Y: <Badge pill>{`${accY}`}</Badge>   Z: <Badge pill>{`${accZ}`}</Badge></td>
+                                                    </tr> */}
+                                                    <tr>
+                                                        <td>Last Update</td> <td><Badge pill>{`${lastUpdate}`}</Badge><br /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </Table>
+                                            <Button color="warning" onClick={this.refreshData}><b>Refresh</b></Button>
                                         </CardBody>
                                     </Card>
                                 </div>

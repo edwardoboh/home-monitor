@@ -4,7 +4,7 @@ const Device = require("../../model/Devices")
 
 // GET      :[url]/device
 route.get("/", (req, res) => {
-    Device.find().then(resp => {
+    Device.find({$sort: {_id: -1}}).then(resp => {
         // Reformat the data before sending it to the client
         // let Devices = []
         // resp.forEach(devResp => {
@@ -23,7 +23,7 @@ route.get("/", (req, res) => {
         //     Devices.push({properties, geometry})
         // })
         // res.json({data: Devices, msg: "GET all Device Successful"})
-        res.json({data: resp, msg: "GET all Device Successful"})
+        res.json({data: [resp[0]], msg: "GET all Device Successful"})
     })
     .catch(e => {
         console.log("Unable to get all Devices")

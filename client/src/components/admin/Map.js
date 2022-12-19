@@ -84,7 +84,7 @@ class Map extends Component {
                             position={{lat: (latitude ? latitude : mark.latitude), lng: (longitude ? longitude : mark.longitude)}}
                             // label="D"
                             icon={{
-                                url: `/car2.svg`,
+                                url: `/person.svg`,
                                 scaledSize: new window.google.maps.Size(40, 40)
                             }}
                         >

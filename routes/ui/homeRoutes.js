@@ -13,6 +13,7 @@ route.get("/", (req, res) => {
         resp.forEach(respHome => {
             let properties = {
                 id: respHome._id,
+                name: respHome.name,
                 address: respHome.address,
                 email: respHome.email,
                 phone: respHome.phone,
@@ -30,6 +31,7 @@ route.get("/", (req, res) => {
 route.post("/add", (req, res) => {
     const {properties, geometry} = req.body
     const home = new Home({
+            name: properties.name,
             address: properties.address,
             email: properties.email,
             latitude: geometry.coordinates[0],

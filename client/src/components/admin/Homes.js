@@ -31,6 +31,7 @@ class Homes extends Component {
                 latitude: null,
                 longitude: null,
                 phone: "",
+                name: "",
             },
             modal: false,
             search: null,
@@ -92,6 +93,7 @@ class Homes extends Component {
     newHome = () => {
         const newHome = {
             properties: {
+                name: this.state.newHome.name,
                 address: this.state.newHome.address,
                 email: this.state.newHome.email,
                 phone: this.state.newHome.phonePrimary,
@@ -193,7 +195,15 @@ class Homes extends Component {
                     </div>
                     </ModalBody>
                 </Modal>
-                <Button onClick={this.toggleModal} color="dark" block style={{marginBottom:"1.5rem"}}>Create</Button>
+                <Button
+                    onClick={this.toggleModal}
+                    className="mt-4"
+                    color="dark"
+                    block
+                    style={{marginBottom:"1.5rem"}}
+                >
+                    Create
+                </Button>
                 <hr />
                 <br />
                 <ListGroup>
